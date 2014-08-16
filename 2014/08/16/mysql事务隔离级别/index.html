@@ -4,21 +4,27 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
-  <title>Archives: 2014/8 | life4code</title>
+  <title>mysql事务隔离级别 | life4code</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   
     <meta name="author" content="wangts">
   
   
-  <meta name="description" content="life code python java">
-<meta property="og:type" content="website">
-<meta property="og:title" content="life4code">
-<meta property="og:url" content="http://blog.life4code.com/archives/2014/08/">
+    <meta name="description" content="最近学习了一下mysql的数据库的事务隔离和mysql如何处理并发更新的操作，在任何时候并发操作在系统中都会出现，本片博客就学习mysql的隔离级别做一下总结，欢迎拍砖。
+mysql事务的隔离级别一共有四个：分别为：读未提交（READ UNCOMMITTED）：　　这个隔离级别会出现，事务A读取到另一个事务B未提交的内容，有可能事务B最后rollback了，事务A读取的内容就不正确了。读已提交">
+  
+  <meta name="description" content="最近学习了一下mysql的数据库的事务隔离和mysql如何处理并发更新的操作，在任何时候并发操作在系统中都会出现，本片博客就学习mysql的隔离级别做一下总结，欢迎拍砖。
+mysql事务的隔离级别一共有四个：分别为：读未提交（READ UNCOMMITTED）：　　这个隔离级别会出现，事务A读取到另一个事务B未提交的内容，有可能事务B最后rollback了，事务A读取的内容就不正确了。读已提交">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql事务隔离级别">
+<meta property="og:url" content="http://blog.life4code.com/2014/08/16/mysql事务隔离级别/">
 <meta property="og:site_name" content="life4code">
-<meta property="og:description" content="life code python java">
+<meta property="og:description" content="最近学习了一下mysql的数据库的事务隔离和mysql如何处理并发更新的操作，在任何时候并发操作在系统中都会出现，本片博客就学习mysql的隔离级别做一下总结，欢迎拍砖。
+mysql事务的隔离级别一共有四个：分别为：读未提交（READ UNCOMMITTED）：　　这个隔离级别会出现，事务A读取到另一个事务B未提交的内容，有可能事务B最后rollback了，事务A读取的内容就不正确了。读已提交">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="life4code">
-<meta name="twitter:description" content="life code python java">
+<meta name="twitter:title" content="mysql事务隔离级别">
+<meta name="twitter:description" content="最近学习了一下mysql的数据库的事务隔离和mysql如何处理并发更新的操作，在任何时候并发操作在系统中都会出现，本片博客就学习mysql的隔离级别做一下总结，欢迎拍砖。
+mysql事务的隔离级别一共有四个：分别为：读未提交（READ UNCOMMITTED）：　　这个隔离级别会出现，事务A读取到另一个事务B未提交的内容，有可能事务B最后rollback了，事务A读取的内容就不正确了。读已提交">
 
   
     <link rel="alternate" href="/atom.xml" title="life4code" type="application/atom+xml">
@@ -54,15 +60,7 @@
   </nav>
   <div class="clearfix"></div>
 </header>
-    <div class="content">
-
-
-<h2 class="archives-title"><span>2014</span></h2>
-
-
-
-  
-    <article class="post">
+    <div class="content"><article class="post">
   <header>
     
       <div class="icon"></div>
@@ -74,7 +72,7 @@
     
     
   
-    <h1 class="title"><a href="/2014/08/16/mysql事务隔离级别/">mysql事务隔离级别</a></h1>
+    <h1 class="title">mysql事务隔离级别</h1>
   
 
   </header>
@@ -111,57 +109,18 @@
 
     
   </div>
-  <footer class="end-sep">
+  <footer>
     
       
       
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2014/08/16/hello-world/">
-  <time datetime="2014-08-16T10:57:28.000Z">
-    8月 16 2014
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2014/08/16/hello-world/">Hello World</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <p>hello world!这个博客使用Hexo框架生成的静态页面并托管到github上，比自己是用jekyll写code更加容易维护，以后所有的文章都会迁移到这个页面。</p>
-
-    
+  <div class="tags">
+    <a class="tags-link" href="/tags/mysql数据库/">mysql数据库</a>
   </div>
-  <footer class="end-sep">
-    
-      
-      
+
     
     <div class="clearfix"></div>
   </footer>
 </article>
-
-
-  
-
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
 
 </div>
   </div>
