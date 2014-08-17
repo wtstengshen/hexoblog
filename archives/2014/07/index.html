@@ -37,7 +37,7 @@
     <header id="header">
   <div class="title">
     <h1><a href="/">life4code</a></h1>
-    <p><a href="/">this is life4code blog</a></p>
+    <p><a href="/">coding all of life</a></p>
   </div>
   <nav class="nav">
     <ul>
@@ -88,7 +88,7 @@
 <p>　第二种情况：假如我去租房，需要经过中介，找到一家租房的中介公司，然后把房屋租了。这里抽象一下就是我访问了真实对象的代理对象（中介），这里的代理对象（中介）需要持有真实对象（房屋主人）才能把房屋租给我（因为中介手里没有房子，他肯定要有房屋真实主人的房子才行）。结构图如下：<br><img src="http://life4code.qiniudn.com/20140715001.png" alt="file-list"><br>　大家一定要明白的是，代理对象（中介）一定要持有真实对象（房屋主人）才行。</p>
 <p>　下边是静态代理的代码实现：</p>
 <p>　首先代理对象和真实对象都需要实现同一个接口或继承抽象类，这个接口或者抽象类其实就是说我这里是租房屋的，不是租汽车的或别的东西，接口中定义一个quote（报价）方法。　　　</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{</div><div class="line">        <span class="javadoc">/***</span></div><div class="line">        * 这个接口定义一个报价方法</div><div class="line">        */</div><div class="line">        <span class="keyword">public</span> String <span class="title">quote</span>();</div><div class="line"></div><div class="line">}</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{</div><div class="line">        <span class="javadoc">/***</span></div><div class="line">        * 这个接口定义一个报价方法</div><div class="line">        */</div><div class="line">        <span class="keyword">public</span> String <span class="title">quote</span>();</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p>　然后定义一个真实对象类，就是代表真实的房屋的主人，实现Subject接口，同时实现报价方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{</div><div class="line">        <span class="annotation">@Override</span></div><div class="line">        <span class="keyword">public</span> String <span class="title">quote</span>() {</div><div class="line">            <span class="keyword">return</span> <span class="string">"房屋出租2000元一个月"</span>;</div><div class="line">        }</div><div class="line">}</div></pre></td></tr></table></figure>

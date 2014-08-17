@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>xss | life4code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="wangts">
+  
+  
+    <meta name="description" content="最近在做项目中的漏洞修复工作，在短时间内接触到很多关于web开发需要防范的漏洞，例如SQL injection , XSS, CSRF等等，这些漏洞对web开发的项目来说的破坏还是比较大的，其实在网上有很多这些漏洞的介绍和防范，像SQL injection这些漏洞的注入已经很少见了。作为一个初学者我认为还是要能够弄清楚为什么会产生这个漏洞，这样才能从原理上理解漏洞的发生，才能更好的去修复它，本">
+  
+  <meta name="description" content="最近在做项目中的漏洞修复工作，在短时间内接触到很多关于web开发需要防范的漏洞，例如SQL injection , XSS, CSRF等等，这些漏洞对web开发的项目来说的破坏还是比较大的，其实在网上有很多这些漏洞的介绍和防范，像SQL injection这些漏洞的注入已经很少见了。作为一个初学者我认为还是要能够弄清楚为什么会产生这个漏洞，这样才能从原理上理解漏洞的发生，才能更好的去修复它，本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xss">
+<meta property="og:url" content="http://blog.life4code.com/2014/06/21/xss/">
+<meta property="og:site_name" content="life4code">
+<meta property="og:description" content="最近在做项目中的漏洞修复工作，在短时间内接触到很多关于web开发需要防范的漏洞，例如SQL injection , XSS, CSRF等等，这些漏洞对web开发的项目来说的破坏还是比较大的，其实在网上有很多这些漏洞的介绍和防范，像SQL injection这些漏洞的注入已经很少见了。作为一个初学者我认为还是要能够弄清楚为什么会产生这个漏洞，这样才能从原理上理解漏洞的发生，才能更好的去修复它，本">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="xss">
+<meta name="twitter:description" content="最近在做项目中的漏洞修复工作，在短时间内接触到很多关于web开发需要防范的漏洞，例如SQL injection , XSS, CSRF等等，这些漏洞对web开发的项目来说的破坏还是比较大的，其实在网上有很多这些漏洞的介绍和防范，像SQL injection这些漏洞的注入已经很少见了。作为一个初学者我认为还是要能够弄清楚为什么会产生这个漏洞，这样才能从原理上理解漏洞的发生，才能更好的去修复它，本">
+
+  
+    <link rel="alternate" href="/atom.xml" title="life4code" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">life4code</a></h1>
+    <p><a href="/">coding all of life</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/06/21/xss/">
+  <time datetime="2014-06-21T09:27:44.000Z">
+    6月 21 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">xss</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>　　最近在做项目中的漏洞修复工作，在短时间内接触到很多关于web开发需要防范的漏洞，例如SQL injection , XSS, CSRF等等，这些漏洞对web开发的项目来说的破坏还是比较大的，其实在网上有很多这些漏洞的介绍和防范，像SQL injection这些漏洞的注入已经很少见了。作为一个初学者我认为还是要能够弄清楚为什么会产生这个漏洞，这样才能从原理上理解漏洞的发生，才能更好的去修复它，本文就对XSS漏洞做一个简单的笔记，仅供大家相互交流不断的提升web开发的安全性。<br>　　XSS的全称Cross-site Scripting，夸脚本攻击，其实它的缩写应该是CSS，但是和web开发使用的css重名了，所以就简称为XSS了，该漏洞在web开发中比较常见，下面演示一个XSS漏洞的过程，我自己写了一个很简单的web页面（大家不要拍砖），两个输入框，姓名和个人介绍。<br>　　web开发中的常见漏洞，一般都发生在这些输入框中，一般情况我们会对这些输入域进行客户端的校验和服务器端的校验，但是在客户端的校验基本上起不来什么作用，因为客户端的所有代码我们都可以进行更改，防止漏洞的发生还是需要服务器端的校验，但是一般服务器端的校验都是校验你输入的字符或者是数字的长度等等。下面就演示一个XSS的漏洞注入，当我们写入姓名和个人介绍之后，后台代码的处理就是进行一个简单的转发，然后把我们刚才的信息转发到一个info.jsp页面进行显示，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="annotation">@Override</span></div><div class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span>(HttpServletRequest req, HttpServletResponse resp) <span class="keyword">throws</span> ServletException, IOException {</div><div class="line">    String username = req.getParameter(<span class="string">"username"</span>);</div><div class="line">    String describe = req.getParameter(<span class="string">"describe"</span>);</div><div class="line">    req.setAttribute(<span class="string">"username"</span>, username);</div><div class="line">    req.setAttribute(<span class="string">"describe"</span>, describe);</div><div class="line">    req.getRequestDispatcher(<span class="string">"/info.jsp"</span>).forward(req, resp);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>　　我们在输入框中这样输入：</p>
+<p>　　大家看一下个人介绍里边写的是一段javascript代码，目前我们后台没有对javascript代码做任何的处理，直接把输入的信息输出到info.jsp页面,这个时候我们点击提交按钮，页面跳转到info.jsp页面之后，就坏事了，直接把我们写的javascript代码运行了，直接弹出 hello world 提示框了。如果我们在个人介绍写上<script>document.location.href=’<a href="http://www.baidu.com">http://www.baidu.com</a>‘</script>,那么提交之就跳转到百度了，如果跳转到xxoo网站呢，这不就坏事了嘛。如果你使用的是chrome 和 firefox浏览器演示例子，会发现不会出现上边的情况，主要原因是chrome和firefox浏览器进行了拦截，看一下chrome浏览器console中的错误提示：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">The XSS Auditor refused <span class="built_in">to</span> execute <span class="operator">a</span> script <span class="operator">in</span> </div><div class="line"><span class="string">'http://127.0.0.1:8080/javaweb/helloworld'</span> because its source code </div><div class="line">was found <span class="operator">within</span> <span class="operator">the</span> request. The auditor was enabled <span class="keyword">as</span> <span class="operator">the</span> server </div><div class="line">sent neither <span class="operator">an</span> <span class="string">'X-XSS-Protection'</span> nor <span class="string">'Content-Security-Policy'</span> header. </div><div class="line">helloworld:<span class="number">24</span></div></pre></td></tr></table></figure>
+
+<p>　 如果在request的请求和response响应中包含相同的script可执行的脚本，chrome会进行拦截，难道我们使用chrome浏览器就可以防止XSS的出现吗？答案肯定不是这样的，一般情况下我们会把用户输入的表单内容存到数据库中，然后再查询的时候进行显示，现在让我们模拟一下查询数据库，显示用户的输入，看看chrome会进行拦截吗？<br>后台的代码改一下，模拟查询数据库，是模拟：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span>(HttpServletRequest req, HttpServletResponse resp)</div><div class="line">            <span class="keyword">throws</span> ServletException, IOException {</div><div class="line">        </div><div class="line">        String username = req.getParameter(<span class="string">"username"</span>);</div><div class="line">        String describe = req.getParameter(<span class="string">"describe"</span>);</div><div class="line">        <span class="keyword">if</span>(username == <span class="keyword">null</span> || describe == <span class="keyword">null</span>){</div><div class="line">            username =<span class="string">"aaaa"</span>;</div><div class="line">            describe=<span class="string">"helloworld&lt;script&gt;alert('hello world');&lt;/script&gt;"</span>;</div><div class="line">        }</div><div class="line">        System.out.println(username +<span class="string">" : "</span>+ describe);</div><div class="line">        </div><div class="line">        req.setAttribute(<span class="string">"username"</span>, username);</div><div class="line">        req.setAttribute(<span class="string">"describe"</span>, describe);</div><div class="line">        req.getRequestDispatcher(<span class="string">"/info.jsp"</span>).forward(req, resp);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>　　在这里我们直接请求这个servlet然后再info.jsp页面显示信息，这个时候你会发现，我们  describe=”helloworld<script>alert(‘hello world’);</script>“;这里的javascript脚本执行了，弹出的hello world 窗口。所以仅仅依靠浏览器防止XSS是不行的。我们需要自己在后台对这些特殊的字符进行转码，当这些字符再次显示到页面的时候不执行脚本。<br>　　使用什么样的方法才能阻止这种情况的发生，就是对HTML 中的预留字符替换为字符实体，例如：对&lt; 进行替换成 &amp;lt，对&gt;替换成&amp;gt  等等。在这里把我们的代码进行一下完善防止XSS的出现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span>(HttpServletRequest req, HttpServletResponse resp) <span class="keyword">throws</span> ServletException, IOException {</div><div class="line">    String username = req.getParameter(<span class="string">"username"</span>);</div><div class="line">    String describe = req.getParameter(<span class="string">"describe"</span>);</div><div class="line">    <span class="keyword">if</span>(username == <span class="keyword">null</span> || describe == <span class="keyword">null</span>){</div><div class="line">        username =<span class="string">"aaaa"</span>;</div><div class="line">        describe=<span class="string">"helloworld&lt;script&gt;alert('hello world');&lt;/script&gt;"</span>;</div><div class="line">    }</div><div class="line">    <span class="comment">//HTML 中的预留字符必须被替换为字符实体</span></div><div class="line">    username = StringEscapeUtils.escapeHtml4(username);</div><div class="line">    describe = StringEscapeUtils.escapeHtml4(describe);</div><div class="line">    System.out.println(username +<span class="string">" : "</span>+ describe);</div><div class="line">    req.setAttribute(<span class="string">"username"</span>, username);</div><div class="line">    req.setAttribute(<span class="string">"describe"</span>, describe);</div><div class="line">    req.getRequestDispatcher(<span class="string">"/info.jsp"</span>).forward(req, resp);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>　　　　这个时候我们再次使用chrome浏览器直接访问请求的servlet在info.jsp中显示的结果:<br>　　这样我们就可以简单的防止XSS夸脚本攻击，代码中的 StringEscapeUtils是apache common-lang 包下的一个工具类，这个工具类也可以对sql中的保留字符进行转换，同时我们自己也可以自己实现一个对html中的预留字进行替换的程序。在后台打印的describe的字符已经被替换为：<br>　　helloworld&lt;script&gt;alert(‘hello world’);&lt;/script&gt;  把这些内容显示在html中是不会执行javascript脚本的。<br>　　本人也是刚刚接触XSS漏洞的原理，上边举得例子是目前最简单的例子，一些很深入的XSS漏洞的方法还需要不断的学习和研究，希望大家有这方面的资料可以进行一下共享。到此结束。</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">wangts</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="http://cdn.staticfile.org/jquery/1.8.1/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>
