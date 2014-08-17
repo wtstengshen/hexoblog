@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>java动态代理 | life4code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="wangts">
+  
+  
+    <meta name="description" content="今天介绍一下代理设计模式，在业务场景中使用代理模式的好处有很多，包括什么权限校验，事务管理等等，具体有什么好处大家自动百度吧，我这里只解释代理模式的设计原理。首先这个设计模式出来的时候先是静态代理模式，只有理解了静态代理模式，才能理解JDK提供的动态代理是怎么回事，首先介绍静态代理，如果有错误的地方请大家拍砖。　　
+一，静态代理　
+　第一种情况：假如我去租房，没有经过中介，直接找到了房屋的主人。">
+  
+  <meta name="description" content="今天介绍一下代理设计模式，在业务场景中使用代理模式的好处有很多，包括什么权限校验，事务管理等等，具体有什么好处大家自动百度吧，我这里只解释代理模式的设计原理。首先这个设计模式出来的时候先是静态代理模式，只有理解了静态代理模式，才能理解JDK提供的动态代理是怎么回事，首先介绍静态代理，如果有错误的地方请大家拍砖。　　
+一，静态代理　
+　第一种情况：假如我去租房，没有经过中介，直接找到了房屋的主人。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java动态代理">
+<meta property="og:url" content="http://blog.life4code.com/2014/07/15/java动态代理/">
+<meta property="og:site_name" content="life4code">
+<meta property="og:description" content="今天介绍一下代理设计模式，在业务场景中使用代理模式的好处有很多，包括什么权限校验，事务管理等等，具体有什么好处大家自动百度吧，我这里只解释代理模式的设计原理。首先这个设计模式出来的时候先是静态代理模式，只有理解了静态代理模式，才能理解JDK提供的动态代理是怎么回事，首先介绍静态代理，如果有错误的地方请大家拍砖。　　
+一，静态代理　
+　第一种情况：假如我去租房，没有经过中介，直接找到了房屋的主人。">
+<meta property="og:image" content="http://life4code.qiniudn.com/20140715001.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java动态代理">
+<meta name="twitter:description" content="今天介绍一下代理设计模式，在业务场景中使用代理模式的好处有很多，包括什么权限校验，事务管理等等，具体有什么好处大家自动百度吧，我这里只解释代理模式的设计原理。首先这个设计模式出来的时候先是静态代理模式，只有理解了静态代理模式，才能理解JDK提供的动态代理是怎么回事，首先介绍静态代理，如果有错误的地方请大家拍砖。　　
+一，静态代理　
+　第一种情况：假如我去租房，没有经过中介，直接找到了房屋的主人。">
+
+  
+    <link rel="alternate" href="/atom.xml" title="life4code" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">life4code</a></h1>
+    <p><a href="/">this is life4code blog</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/07/15/java动态代理/">
+  <time datetime="2014-07-15T13:48:03.000Z">
+    7月 15 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">java动态代理</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>　今天介绍一下代理设计模式，在业务场景中使用代理模式的好处有很多，包括什么权限校验，事务管理等等，具体有什么好处大家自动百度吧，我这里只解释代理模式的设计原理。首先这个设计模式出来的时候先是静态代理模式，只有理解了静态代理模式，才能理解JDK提供的动态代理是怎么回事，首先介绍静态代理，如果有错误的地方请大家拍砖。　　</p>
+<p>一，静态代理　</p>
+<p>　第一种情况：假如我去租房，没有经过中介，直接找到了房屋的主人。这里抽象一下就是我直接访问了真实对象（房屋的主人），然后我把房屋给租了。</p>
+<p>　第二种情况：假如我去租房，需要经过中介，找到一家租房的中介公司，然后把房屋租了。这里抽象一下就是我访问了真实对象的代理对象（中介），这里的代理对象（中介）需要持有真实对象（房屋主人）才能把房屋租给我（因为中介手里没有房子，他肯定要有房屋真实主人的房子才行）。结构图如下：<br><img src="http://life4code.qiniudn.com/20140715001.png" alt="file-list"><br>　大家一定要明白的是，代理对象（中介）一定要持有真实对象（房屋主人）才行。</p>
+<p>　下边是静态代理的代码实现：</p>
+<p>　首先代理对象和真实对象都需要实现同一个接口或继承抽象类，这个接口或者抽象类其实就是说我这里是租房屋的，不是租汽车的或别的东西，接口中定义一个quote（报价）方法。　　　</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{</div><div class="line">        <span class="javadoc">/***</span></div><div class="line">        * 这个接口定义一个报价方法</div><div class="line">        */</div><div class="line">        <span class="keyword">public</span> String <span class="title">quote</span>();</div><div class="line"></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>　然后定义一个真实对象类，就是代表真实的房屋的主人，实现Subject接口，同时实现报价方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{</div><div class="line">        <span class="annotation">@Override</span></div><div class="line">        <span class="keyword">public</span> String <span class="title">quote</span>() {</div><div class="line">            <span class="keyword">return</span> <span class="string">"房屋出租2000元一个月"</span>;</div><div class="line">        }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>　定义一个代理类，这个代理类一定持有真实对象的引用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxySubject</span> <span class="keyword">implements</span> <span class="title">Subject</span></span>{</div><div class="line">        <span class="annotation">@Override</span></div><div class="line">        <span class="keyword">public</span> String <span class="title">quote</span>() {</div><div class="line">            <span class="comment">//代理对象持有真实对象</span></div><div class="line">            Subject subject = <span class="keyword">new</span> RealSubject();</div><div class="line">            <span class="comment">//返回真实对象的报价多少钱</span></div><div class="line">            String quote = subject.quote();</div><div class="line">            <span class="comment">//代理对象增加真实对象的报价</span></div><div class="line">            <span class="keyword">return</span> quote.replace(<span class="string">"2000"</span>, <span class="string">"3000"</span>);</div><div class="line">        }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>　编写我们的测试类，租房去找中介，然后查看房屋的报价是多少钱</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {</div><div class="line">            <span class="javadoc">/**</span></div><div class="line">             * 代理对象和真实对象都要实现同一个接口</div><div class="line">             */</div><div class="line">             <span class="comment">//直接访问真实对象</span></div><div class="line">             Subject subject = <span class="keyword">new</span> RealSubject();</div><div class="line">             System.out.println(subject.quote());</div><div class="line">             <span class="comment">//访问代理对象</span></div><div class="line">             subject = <span class="keyword">new</span> ProxySubject();</div><div class="line">             System.out.println(subject.quote());</div><div class="line">     }</div></pre></td></tr></table></figure>
+
+<p>  　执行之后会发现中介把房屋的租金增加了，这就起到了代理的作用。这就是一个静态代理的小例子，静态代理主要注意两点：1，真实类和代理类都实现一个相同的接口；2，代理类持有真实类的对象的引用。按照租房的情况说明就是：中介和房租主人都必须是卖房子的，不能你去中介租房，结果给你返回一个汽车的报价；中介必须有房屋主人的房子才能租给你，如果中介手中没有房子，只是一个空壳子，也没有办法把房子租给你。<br>  　静态代理的一个不好的地方是如果接口里增加了一个方法，那么真实类和代理类都必须实现相应的方法，增加了代码的复杂程度。还有就是如果代理类没有实现接口怎么办（解决办法自行百度吧 ^_^）<br>    二，动态代理<br>  　jDK提供了一个java.lang.reflect.Proxy对象，可以用来对真实类实现动态代理，在运行时通过反射增强真实类。我们这里给Subject接口增加一个方法  getHouseAddress（得到房子的地址），然后真实类实现这个方法，返回”房屋的地址在地球”;代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealSubjectHome</span> <span class="keyword">implements</span> <span class="title">Subject</span></span>{</div><div class="line">    <span class="annotation">@Override</span></div><div class="line">    <span class="keyword">public</span> String <span class="title">quote</span>() {</div><div class="line">        <span class="keyword">return</span> <span class="string">"房屋出租2000元"</span>;</div><div class="line">    }</div><div class="line">    <span class="annotation">@Override</span></div><div class="line">    <span class="keyword">public</span> String <span class="title">getHouseAddress</span>() {</div><div class="line">        <span class="keyword">return</span> <span class="string">"房屋的地址在地球"</span>;</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这里我们看一下代理类的实现（主要的解释都在注释中）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>{</div><div class="line">   <span class="comment">//代理对象是要持有真实对象</span></div><div class="line">   <span class="keyword">private</span> Object RealObject;</div><div class="line">   <span class="keyword">public</span> Object <span class="title">createSubject</span>(Object RealObject){</div><div class="line">   <span class="javadoc">/**</span></div><div class="line">    * 参数含义：</div><div class="line">    *  classloader 是代理的类加载器</div><div class="line">    *  interface就是代理类实现的接口,因为代理类需要和真实对象实现相同的接口，所以返回的就是真实类的接口</div><div class="line">    *  InvocationHandler调用真实类的处理函数，代理类需要对真实对象做一些处理</div><div class="line">    *  返回值   返回一个真实类的代理对象</div><div class="line">    * </div><div class="line">    */</div><div class="line">     <span class="keyword">this</span>.RealObject = RealObject;</div><div class="line">     <span class="keyword">return</span> Proxy.newProxyInstance(<span class="keyword">this</span>.getClass().getClassLoader(),<span class="keyword">this</span>.Real</div><div class="line">     Object.getClass().getInterfaces(),<span class="comment">//这里是真实对象实现的接口，代理对象也要实现相同的接口</span></div><div class="line">    <span class="keyword">this</span>);</div><div class="line"> }</div><div class="line">  <span class="javadoc">/**</span></div><div class="line">   * 参数：</div><div class="line">   *  proxy  就是代理类的对象</div><div class="line">   *  method 就是需要调用的实现接口中的方法</div><div class="line">   *  args   方法中的参数</div><div class="line">   *  返回值    返回代理类调用实现接口的方法的返回值</div><div class="line">   */</div><div class="line">   <span class="annotation">@Override</span></div><div class="line">   <span class="keyword">public</span> Object <span class="title">invoke</span>(Object proxy, Method method, Object[] args)</div><div class="line">  <span class="keyword">throws</span> Throwable {</div><div class="line">    <span class="comment">//调用真实对象中的方法，获取返回值</span></div><div class="line">    <span class="keyword">if</span>(method.getName().equals(<span class="string">"quote"</span>)){</div><div class="line">        String returnValue = (String) method.invoke(<span class="keyword">this</span>.RealObject, args);</div><div class="line">        returnValue = returnValue.replace(<span class="string">"2000"</span>, <span class="string">"3000"</span>);</div><div class="line">        <span class="keyword">return</span> returnValue;</div><div class="line">    }</div><div class="line">   <span class="comment">//其他不需要代理类修改的方法</span></div><div class="line">   <span class="keyword">return</span> method.invoke(<span class="keyword">this</span>.RealObject, args);</div><div class="line"> }</div></pre></td></tr></table></figure>
+
+<p> 　其中Proxy.newProxyInstance方法返回一个代理对象，其中的第三个参数是实现InvocationHandler的接口，当调用代理对象的方法的时候，会调用InvocationHandler接口中的invoke方法用来对真实对象的方法增强，我们在invoke方法中只修改了获得房屋报价的内容。对获得房屋地址方法没有进行更改，直接调用真实对象的方法就行了。解释一下就是中介会把房屋的出租价格提高，但是房屋的地址不能修改吧，所以动态代理可以很好的控制需要增强的方法。<br> 　看一下我们的测试类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {</div><div class="line">     <span class="comment">//找代理出租房屋</span></div><div class="line">     RealSubjectHome subjecthome = <span class="keyword">new</span> RealSubjectHome();</div><div class="line">     DynamicProxy proxy = <span class="keyword">new</span> DynamicProxy();</div><div class="line">     Subject subject = (Subject) proxy.createSubject(subjecthome);</div><div class="line">     <span class="comment">//得到房屋的报价信息</span></div><div class="line">     System.out.println(subject.quote());</div><div class="line">     <span class="comment">//得到房屋的地址</span></div><div class="line">     System.out.println(subject.getHouseAddress());</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>  　使用动态代理编写代理类的时候，其实并不难，只要注意两点就行了：1，代理类持有真实类的引用 2，代理类和真实类实现同一个接口。然后要多proxy类的newProxyInstance的参数含义理解，对InvocationHandler中的invoke方法的参数理解，就可以了。<br>  　动态代理的思想在框架中使用的很多，其实使用jdk提供的动态代理的实现并不是很多，都是使用三方的实现，例如CGLIB，直接对类的字节码文件进行增强。静态代理和动态代理的实现就先这样，如果叙述中有错误，请指明。</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">wangts</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="http://cdn.staticfile.org/jquery/1.8.1/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>
